@@ -1,10 +1,7 @@
 local M = {}
 
 function M.setup()
-    vim.o.statusline = "%!v:lua.require('" .. "default" .. "')()"
-end
-
-function M.update_colors()
+    vim.o.statusline = "%!v:lua.require('default')()"
 end
 
 return M
