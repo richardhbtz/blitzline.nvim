@@ -18,7 +18,7 @@
         require("nvstl").setup {}
     end,
     dependencies = {
-        "richardhbtz/base46"
+        "richardhbtz/base46.nvim"
     }
 },
 ```
