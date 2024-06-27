@@ -19,7 +19,8 @@ local sep_r = separators["right"]
 local M = {}
 
 M.update_colors = function()
-    local new_palette = require(vim.g.colors_name .. ".palette")
+    local new_palette = require("base46").get_colors("base46", require("custom.rich").theme)
+    -- local new_palette = require(vim.g.colors_name .. ".palette")
 
     local colors = {
         statusline_bg = new_palette.statusline_bg,
