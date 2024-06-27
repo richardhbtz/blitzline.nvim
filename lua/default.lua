@@ -1,60 +1,8 @@
 local utils = require "utils"
-local palette = require(vim.g.colors_name .. ".palette")
-
-local colors = {
-    statusline_bg = palette.statusline_bg,
-    light_grey = palette.lightgrey,
-    nord_blue = palette.nord_blue,
-    green = palette.green,
-    grey = palette.grey,
-    lightbg = palette.lightbg,
-    white = palette.white,
-    red = palette.red,
-    one_bg = palette.one_bg,
-    black = palette.black,
-    yellow = palette.yellow,
-    dark_purple = palette.dark_purple,
-    cyan = palette.cyan,
-    orange = palette.orange,
-    teal = palette.teal,
-    blue = palette.blue,
-}
 
 local function set_highlight(group, fg, bg, bold)
     vim.api.nvim_set_hl(0, group, { fg = fg, bg = bg, bold = bold or false })
 end
-
-set_highlight("St_gitIcons", colors.light_grey, colors.statusline_bg, true)
-set_highlight("St_Lsp", colors.nord_blue, colors.statusline_bg)
-set_highlight("St_LspMsg", colors.green, colors.statusline_bg)
-set_highlight("St_EmptySpace", colors.grey, colors.lightbg)
-set_highlight("St_file", colors.white, colors.lightbg)
-set_highlight("St_file_sep", colors.lightbg, colors.statusline_bg)
-set_highlight("St_cwd_icon", colors.one_bg, colors.red)
-set_highlight("St_cwd_text", colors.white, colors.lightbg)
-set_highlight("St_cwd_sep", colors.red, colors.statusline_bg)
-set_highlight("St_pos_sep", colors.green, colors.lightbg)
-set_highlight("St_pos_icon", colors.black, colors.green)
-set_highlight("St_pos_text", colors.green, colors.lightbg)
-set_highlight("St_lspError", colors.red, colors.statusline_bg)
-set_highlight("St_lspWarning", colors.yellow, colors.statusline_bg)
-set_highlight("St_LspHints", colors.purple, colors.statusline_bg)
-set_highlight("St_LspInfo", colors.green, colors.statusline_bg)
-
-local function genModes_hl(modename, col)
-    set_highlight("St_" .. modename .. "Mode", colors.black, colors[col], true)
-    set_highlight("St_" .. modename .. "ModeSep", colors[col], colors.grey)
-end
-
-genModes_hl("Normal", "nord_blue")
-genModes_hl("Visual", "cyan")
-genModes_hl("Insert", "dark_purple")
-genModes_hl("Terminal", "green")
-genModes_hl("NTerminal", "yellow")
-genModes_hl("Replace", "orange")
-genModes_hl("Confirm", "teal")
-genModes_hl("Command", "green")
-genModes_hl("Select", "blue")
 
 local default_sep_icons = {
     default = { left = "", right = "" },
@@ -69,6 +17,61 @@ local sep_l = separators["left"]
 local sep_r = separators["right"]
 
 local M = {}
+
+M.update_colors = function()
+    local new_palette = require("base46.hl_themes." .. vim.g.colors_name)().base30
+
+    local colors = {
+        statusline_bg = new_palette.statusline_bg,
+        light_grey = new_palette.lightgrey,
+        nord_blue = new_palette.nord_blue,
+        green = new_palette.green,
+        grey = new_palette.grey,
+        lightbg = new_palette.lightbg,
+        white = new_palette.white,
+        red = new_palette.red,
+        one_bg = new_palette.one_bg,
+        black = new_palette.black,
+        yellow = new_palette.yellow,
+        dark_purple = new_palette.dark_purple,
+        cyan = new_palette.cyan,
+        orange = new_palette.orange,
+        teal = new_palette.teal,
+        blue = new_palette.blue,
+    }
+
+    set_highlight("St_gitIcons", colors.light_grey, colors.statusline_bg, true)
+    set_highlight("St_Lsp", colors.nord_blue, colors.statusline_bg)
+    set_highlight("St_LspMsg", colors.green, colors.statusline_bg)
+    set_highlight("St_EmptySpace", colors.grey, colors.lightbg)
+    set_highlight("St_file", colors.white, colors.lightbg)
+    set_highlight("St_file_sep", colors.lightbg, colors.statusline_bg)
+    set_highlight("St_cwd_icon", colors.one_bg, colors.red)
+    set_highlight("St_cwd_text", colors.white, colors.lightbg)
+    set_highlight("St_cwd_sep", colors.red, colors.statusline_bg)
+    set_highlight("St_pos_sep", colors.green, colors.lightbg)
+    set_highlight("St_pos_icon", colors.black, colors.green)
+    set_highlight("St_pos_text", colors.green, colors.lightbg)
+    set_highlight("St_lspError", colors.red, colors.statusline_bg)
+    set_highlight("St_lspWarning", colors.yellow, colors.statusline_bg)
+    set_highlight("St_LspHints", colors.purple, colors.statusline_bg)
+    set_highlight("St_LspInfo", colors.green, colors.statusline_bg)
+
+    local function genModes_hl(modename, col)
+        set_highlight("St_" .. modename .. "Mode", colors.black, colors[col], true)
+        set_highlight("St_" .. modename .. "ModeSep", colors[col], colors.grey)
+    end
+
+    genModes_hl("Normal", "nord_blue")
+    genModes_hl("Visual", "cyan")
+    genModes_hl("Insert", "dark_purple")
+    genModes_hl("Terminal", "green")
+    genModes_hl("NTerminal", "yellow")
+    genModes_hl("Replace", "orange")
+    genModes_hl("Confirm", "teal")
+    genModes_hl("Command", "green")
+    genModes_hl("Select", "blue")
+end
 
 M.mode = function()
     if not utils.is_activewin() then
@@ -91,6 +94,7 @@ M.file = function()
 end
 
 M.git = function()
+    M.update_colors()
     return "%#St_gitIcons#" .. utils.git()
 end
 
@@ -113,6 +117,7 @@ end
 
 M.cursor = "%#St_pos_sep#" .. sep_l .. "%#St_pos_icon# %#St_pos_text# %p %% "
 M["%="] = "%="
+
 
 return function()
     return utils.generate("default", M)

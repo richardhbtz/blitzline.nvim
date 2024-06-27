@@ -10,8 +10,8 @@ M.is_activewin = function()
 end
 
 local orders = {
-    default = { "mode", "file", "git", "%=", "lsp_msg", "%=", "diagnostics", "lsp", "cwd", "cursor" },
-    vscode = { "mode", "file", "git", "%=", "lsp_msg", "%=", "diagnostics", "lsp", "cursor", "cwd" },
+    default = { "mode", "file", "git", "%=", "lsp_msg", "%=", "diagnostics", "lsp", "cwd", "cursor", "update_colors" },
+    vscode = { "mode", "file", "git", "%=", "lsp_msg", "%=", "diagnostics", "lsp", "cursor", "cwd", "update_colors" },
 }
 
 M.generate = function(theme, modules)
@@ -128,7 +128,7 @@ M.lsp = function()
     if rawget(vim, "lsp") and version >= 10 then
         for _, client in ipairs(vim.lsp.get_clients()) do
             if client.attached_buffers[M.stbufnr()] then
-                return (vim.o.columns > 100 and "   LSP ~ " .. client.name .. " ") or "   LSP "
+                return (vim.o.columns > 100 and "  " .. client.name .. " ") or "   LSP "
             end
         end
     end
