@@ -18,7 +18,7 @@ M.generate = function(theme, modules)
 	local path = vim.api.nvim_buf_get_name(M.stbufnr())
 
 	if path == "" then
-		return nil
+		return ""
 	end
 
 	local order = orders[theme]
